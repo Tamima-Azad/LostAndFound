@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device--width, initial-scale=1.0">
+    <title>Lost & Found - Search Results</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+        }
+        .filter-section {
+            background-color: #e9ecef;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+        }
+        .item-card {
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            background-color: white;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .item-image {
+            max-width: 100%;
+            height: auto;
+            margin-bottom: 10px;
+        }
+        .footer {
+            background-color: #343a40;
+            color: white;
+            text-align: center;
+            padding: 20px 0;
+            position:relative;
+            bottom:0;
+            width:100%;
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="#">Lost & Found</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Post Lost Item</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Post Found Item</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Login/Register</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <div class="filter-section">
+            <h4>Filters</h4>
+            <div class="row">
+                <div class="col-md-3">
+                    <label for="category">Category:</label>
+                    <select class="form-control" id="category">
+                        <option value="">All</option>
+                        <option value="electronics">Electronics</option>
+                        <option value="documents">Documents</option>
+                        <option value="personal">Personal Items</option>
+                        <option value="clothing">Clothing</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label for="location">Location:</label>
+                    <input type="text" class="form-control" id="location" placeholder="Enter location">
+                </div>
+                <div class="col-md-3">
+                    <label for="type">Type:</label>
+                    <select class="form-control" id="type">
+                        <option value="">All</option>
+                        <option value="lost">Lost</option>
+                        <option value="found">Found</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <button class="btn btn-primary mt-4">Apply Filters</button>
+                </div>
+            </div>
+        </div>
+
+        <h4>Search Results</h4>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="item-card">
+                    <img src="https://via.placeholder.com/300x200?text=Item+Image" alt="Item Image" class="item-image">
+                    <h5>Lost Wallet</h5>
+                    <p>Category: Documents</p>
+                    <p>Location: Park</p>
+                    <p>Date: 2024-01-15</p>
+                    <p>Status: Lost</p>
+                    <a href="#" class="btn btn-sm btn-info">View Details</a>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="item-card">
+                    <img src="https://via.placeholder.com/300x200?text=Item+Image" alt="Item Image" class="item-image">
+                    <h5>Found Phone</h5>
+                    <p>Category: Electronics</p>
+                    <p>Location: Library</p>
+                    <p>Date: 2024-01-16</p>
+                    <p>Status: Found</p>
+                    <a href="#" class="btn btn-sm btn-info">View Details</a>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="item-card">
+                  <img src="https://via.placeholder.com/300x200?text=Item+Image" alt="Item Image" class="item-image">
+                  <h5>Matched Keys</h5>
+                  <p>Category: Personal Items</p>
+                  <p>Location: School</p>
+                  <p>Date: 2024-01-17</p>
+                  <p>Status: Matched</p>
+                  <a href="#" class="btn btn-sm btn-success">Matched! View Details</a>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="item-card">
+                  <img src="https://via.placeholder.com/300x200?text=Item+Image" alt="Item Image" class="item-image">
+                  <h5>Lost Jacket</h5>
+                  <p>Category: Clothing</p>
+                  <p>Location: Restaurant</p>
+                  <p>Date: 2024-01-18</p>
+                  <p>Status: Lost</p>
+                  <a href="#" class="btn btn-sm btn-info">View Details</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <footer class="footer">
+        <p>&copy; 2024 Lost & Found. All rights reserved.</p>
+    </footer>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

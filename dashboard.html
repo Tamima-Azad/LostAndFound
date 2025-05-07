@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lost and Found Dashboard</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 20px;
+            background-color: #f8f9fa; /* Light grey background */
+            color: #333;
+        }
+        .dashboard-container {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05); /* Subtle shadow */
+        }
+        h2 {
+            color: #007bff; /* Primary color */
+            margin-bottom: 20px;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 10px;
+        }
+        .section-title {
+            color: #28a745; /* Success color for titles */
+            margin-top: 25px;
+            margin-bottom: 15px;
+        }
+        .activity-list, .found-items-list, .claim-requests-list, .notifications-list {
+            list-style: none;
+            padding: 0;
+        }
+        .list-item {
+            background-color: #fff;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 6px;
+            border: 1px solid #ddd;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .list-item:last-child {
+            margin-bottom: 0;
+        }
+        .item-details {
+            flex-grow: 1;
+        }
+        .item-status {
+            font-weight: bold;
+            color: #6c757d; /* Secondary color for status */
+            margin-left: 15px;
+        }
+        .status-open { color: #17a2b8; } /* Info color */
+        .status-claimed { color: #28a745; } /* Success color */
+        .status-closed { color: #6c757d; } /* Secondary color */
+        .view-details-link {
+            color: #007bff;
+            text-decoration: none;
+            margin-left: 20px;
+            font-size: 0.9em;
+        }
+        .quick-actions {
+            margin-top: 30px;
+            display: flex;
+            gap: 15px;
+        }
+        .quick-action-button {
+            display: inline-block;
+            background-color: #007bff;
+            color: white;
+            padding: 12px 20px;
+            text-decoration: none;
+            border-radius: 8px;
+            transition: background-color 0.3s ease;
+        }
+        .quick-action-button:hover {
+            background-color: #0056b3;
+        }
+        .account-info {
+            margin-top: 30px;
+            padding: 15px;
+            border: 1px solid #eee;
+            border-radius: 6px;
+            background-color: #f9f9f9;
+        }
+        .account-info p {
+            margin-bottom: 8px;
+        }
+        .account-links a {
+            color: #007bff;
+            text-decoration: none;
+            margin-right: 15px;
+            font-size: 0.9em;
+        }
+        .notifications-list .list-item {
+            background-color: #e9ecef; /* Light grey for notifications */
+            border-color: #dee2e6;
+        }
+        .notification-date {
+            color: #6c757d;
+            font-size: 0.8em;
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <h2>Welcome, [User's Name]!</h2>
+
+        <section>
+            <h3 class="section-title">Your Recent Activity</h3>
+            <h4>Items You've Reported Lost:</h4>
+            <ul class="activity-list">
+                <li class="list-item">
+                    <div class="item-details">[Date] - [Item Name]</div>
+                    <span class="item-status status-[Open/Claimed/Closed]">Status: [Open/Claimed/Closed]</span>
+                    <a href="#" class="view-details-link">View Details</a>
+                </li>
+                <li class="list-item">
+                    <div class="item-details">[Date] - [Item Name]</div>
+                    <span class="item-status status-[Open/Claimed/Closed]">Status: [Open/Claimed/Closed]</span>
+                    <a href="#" class="view-details-link">View Details</a>
+                </li>
+                <li class="list-item">
+                    <div class="item-details">[Date] - [Item Name]</div>
+                    <span class="item-status status-[Open/Claimed/Closed]">Status: [Open/Claimed/Closed]</span>
+                    <a href="#" class="view-details-link">View Details</a>
+                </li>
+                <li><a href="#">View All Your Lost Items</a></li>
+            </ul>
+
+            <h4>Items You've Reported Found:</h4>
+            <ul class="found-items-list">
+                <li class="list-item">
+                    <div class="item-details">[Date] - [Brief Description]</div>
+                    <span class="item-status status-[Open/Returned/Closed]">Status: [Open/Returned/Closed]</span>
+                    <a href="#" class="view-details-link">View Details</a>
+                </li>
+                <li class="list-item">
+                    <div class="item-details">[Date] - [Brief Description]</div>
+                    <span class="item-status status-[Open/Returned/Closed]">Status: [Open/Returned/Closed]</span>
+                    <a href="#" class="view-details-link">View Details</a>
+                </li>
+                <li><a href="#">View All Your Found Items</a></li>
+            </ul>
+
+            <h4>Claim Requests:</h4>
+            <ul class="claim-requests-list">
+                <li class="list-item">
+                    <div class="item-details">[Date] - [Item Name] - From: [Finder/Owner Name]</div>
+                    <span class="item-status status-[Pending/Accepted/Rejected]">Status: [Pending/Accepted/Rejected]</span>
+                    <a href="#" class="view-details-link">View Details</a>
+                </li>
+                <li class="list-item">
+                    <div class="item-details">[Date] - [Item Name] - From: [Finder/Owner Name]</div>
+                    <span class="item-status status-[Pending/Accepted/Rejected]">Status: [Pending/Accepted/Rejected]</span>
+                    <a href="#" class="view-details-link">View Details</a>
+                </li>
+                <li><a href="#">View All Claim Requests</a></li>
+            </ul>
+        </section>
+
+        <section>
+            <h3 class="section-title">Latest Found Items</h3>
+            <ul class="found-items-list">
+                <li class="list-item">
+                    <div class="item-details">[Date] - [Brief Description] - Location Found: [Location]</div>
+                    <a href="#" class="view-details-link">View Details</a>
+                </li>
+                <li class="list-item">
+                    <div class="item-details">[Date] - [Brief Description] - Location Found: [Location]</div>
+                    <a href="#" class="view-details-link">View Details</a>
+                </li>
+                <li><a href="#">View All Recently Found Items</a></li>
+            </ul>
+        </section>
+
+        <section>
+            <h3 class="section-title">Quick Actions</h3>
+            <div class="quick-actions">
+                <a href="#" class="quick-action-button">Report a Lost Item</a>
+                <a href="#" class="quick-action-button">Report a Found Item</a>
+            </div>
+        </section>
+
+        <section>
+            <h3 class="section-title">Account Information</h3>
+            <div class="account-info">
+                <p><strong>Username:</strong> [Your Username]</p>
+                <p><strong>Email:</strong> [Your Email Address]</p>
+                <p class="account-links"><a href="#">Edit Profile</a> <a href="#">Change Password</a></p>
+            </div>
+        </section>
+
+        <section>
+            <h3 class="section-title">Notifications</h3>
+            <ul class="notifications-list">
+                <li class="list-item">
+                    <span class="notification-date">[Date]</span> New claim request for your "[Item Name]". <a href="#" class="view-details-link">View</a>
+                </li>
+                <li class="list-item">
+                    <span class="notification-date">[Date]</span> An item matching your lost "[Item Name]" may have been found. <a href="#" class="view-details-link">View</a>
+                </li>
+                <li class="list-item">
+                    <span class="notification-date">[Date]</span> Your claim for "[Item Name]" has been [Accepted/Rejected]. <a href="#" class="view-details-link">View</a>
+                </li>
+                <li><a href="#">View All Notifications</a></li>
+            </ul>
+        </section>
+    </div>
+</body>
+</html>

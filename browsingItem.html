@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FindIt - Browse Items</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: #f8f9fa;
+        }
+
+        .browse-container {
+            max-width: 1200px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+
+        .item-card {
+            margin-bottom: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            overflow: hidden; /* Ensure image fits nicely */
+        }
+
+        .item-card img {
+            width: 100%;
+            height: 200px; /* Fixed height for consistency */
+            object-fit: cover; /* Crop/scale image to fit */
+        }
+
+        .item-details {
+            padding: 20px;
+        }
+
+        .item-details h5 {
+            margin-bottom: 10px;
+        }
+
+        .item-details p {
+            margin-bottom: 5px;
+        }
+
+        .search-filter-container {
+            margin-bottom: 20px;
+            padding: 15px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        nav.navbar{
+            width: 100%;
+        }
+
+    </style>
+</head>
+<body>
+
+    <nav class="navbar navbar-dark bg-dark">
+        <a class="navbar-brand" href="#">FindIt</a>
+    </nav>
+
+    <div class="browse-container">
+        <div class="search-filter-container">
+            <div class="row">
+                <div class="col-md-4">
+                    <input type="text" class="form-control" placeholder="Search by name...">
+                </div>
+                <div class="col-md-3">
+                    <select class="form-control">
+                        <option value="">All Categories</option>
+                        <option value="electronics">Electronics</option>
+                        <option value="documents">Documents</option>
+                        <option value="personal">Personal Items</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <select class="form-control">
+                        <option value="">All Types</option>
+                        <option value="lost">Lost</option>
+                        <option value="found">Found</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <button class="btn btn-primary btn-block">Search</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-4">
+                <div class="item-card">
+                    <img src="placeholder-image.jpg" alt="Item Image">
+                    <div class="item-details">
+                        <h5>Item Name</h5>
+                        <p>Category: Electronics</p>
+                        <p>Type: Lost</p>
+                        <p>Location: City, State</p>
+                        <p>Date: 2024-10-27</p>
+                        <a href="#" class="btn btn-sm btn-outline-primary">View Details</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="item-card">
+                    <img src="placeholder-image2.jpg" alt="Item Image">
+                    <div class="item-details">
+                        <h5>Another Item</h5>
+                        <p>Category: Documents</p>
+                        <p>Type: Found</p>
+                        <p>Location: Somewhere Else</p>
+                        <p>Date: 2024-10-26</p>
+                        <a href="#" class="btn btn-sm btn-outline-primary">View Details</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="item-card">
+                    <img src="placeholder-image3.jpg" alt="Item Image">
+                    <div class="item-details">
+                        <h5>Yet Another Item</h5>
+                        <p>Category: Personal Items</p>
+                        <p>Type: Lost</p>
+                        <p>Location: Another Place</p>
+                        <p>Date: 2024-10-25</p>
+                        <a href="#" class="btn btn-sm btn-outline-primary">View Details</a>
+                    </div>
+                </div>
+            </div>
+            </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
