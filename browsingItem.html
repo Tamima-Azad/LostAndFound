@@ -10,49 +10,54 @@
             font-family: 'Montserrat', sans-serif;
             background-color: #f8f9fa;
         }
-
+        nav.navbar {
+            width: 100%;
+        }
         .browse-container {
             max-width: 1200px;
             margin: 50px auto;
             padding: 20px;
         }
-
         .item-card {
             margin-bottom: 20px;
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            overflow: hidden; /* Ensure image fits nicely */
+            overflow: hidden;
+            background: #fff;
+            transition: box-shadow 0.2s;
         }
-
+        .item-card:hover {
+            box-shadow: 0 8px 24px rgba(56,106,243,0.15);
+        }
         .item-card img {
             width: 100%;
-            height: 200px; /* Fixed height for consistency */
-            object-fit: cover; /* Crop/scale image to fit */
+            height: 200px;
+            object-fit: cover;
         }
-
         .item-details {
             padding: 20px;
         }
-
         .item-details h5 {
             margin-bottom: 10px;
+            font-weight: 600;
         }
-
         .item-details p {
             margin-bottom: 5px;
+            color: #444;
         }
-
         .search-filter-container {
             margin-bottom: 20px;
             padding: 15px;
             background-color: white;
             border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.07);
         }
-        nav.navbar{
-            width: 100%;
+        .no-items {
+            text-align: center;
+            color: #888;
+            margin-top: 40px;
+            font-size: 1.2rem;
         }
-
     </style>
 </head>
 <body>
@@ -63,34 +68,37 @@
 
     <div class="browse-container">
         <div class="search-filter-container">
-            <div class="row">
-                <div class="col-md-4">
-                    <input type="text" class="form-control" placeholder="Search by name...">
+            <form id="searchForm">
+                <div class="row">
+                    <div class="col-md-4 mb-2 mb-md-0">
+                        <input type="text" class="form-control" id="searchName" placeholder="Search by name...">
+                    </div>
+                    <div class="col-md-3 mb-2 mb-md-0">
+                        <select class="form-control" id="searchCategory">
+                            <option value="">All Categories</option>
+                            <option value="electronics">Electronics</option>
+                            <option value="documents">Documents</option>
+                            <option value="personal">Personal Items</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3 mb-2 mb-md-0">
+                        <select class="form-control" id="searchType">
+                            <option value="">All Types</option>
+                            <option value="lost">Lost</option>
+                            <option value="found">Found</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <button type="submit" class="btn btn-primary btn-block">Search</button>
+                    </div>
                 </div>
-                <div class="col-md-3">
-                    <select class="form-control">
-                        <option value="">All Categories</option>
-                        <option value="electronics">Electronics</option>
-                        <option value="documents">Documents</option>
-                        <option value="personal">Personal Items</option>
-                        <option value="other">Other</option>
-                    </select>
-                </div>
-                <div class="col-md-3">
-                    <select class="form-control">
-                        <option value="">All Types</option>
-                        <option value="lost">Lost</option>
-                        <option value="found">Found</option>
-                    </select>
-                </div>
-                <div class="col-md-2">
-                    <button class="btn btn-primary btn-block">Search</button>
-                </div>
-            </div>
+            </form>
         </div>
 
-        <div class="row">
-            <div class="col-md-4">
+        <div class="row" id="itemsRow">
+            <!-- Example items (replace with dynamic content in PHP version) -->
+            <div class="col-md-4 item-col" data-name="Item Name" data-category="electronics" data-type="lost">
                 <div class="item-card">
                     <img src="placeholder-image.jpg" alt="Item Image">
                     <div class="item-details">
@@ -103,7 +111,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-4 item-col" data-name="Another Item" data-category="documents" data-type="found">
                 <div class="item-card">
                     <img src="placeholder-image2.jpg" alt="Item Image">
                     <div class="item-details">
@@ -116,7 +124,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-4 item-col" data-name="Yet Another Item" data-category="personal" data-type="lost">
                 <div class="item-card">
                     <img src="placeholder-image3.jpg" alt="Item Image">
                     <div class="item-details">
@@ -129,10 +137,36 @@
                     </div>
                 </div>
             </div>
-            </div>
+        </div>
+        <div id="noItems" class="no-items" style="display:none;">
+            No items found matching your search.
+        </div>
     </div>
 
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script>
+        // Simple client-side filtering for demo purposes
+        document.getElementById('searchForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            var name = document.getElementById('searchName').value.toLowerCase();
+            var category = document.getElementById('searchCategory').value;
+            var type = document.getElementById('searchType').value;
+            var found = false;
+            var items = document.querySelectorAll('.item-col');
+            items.forEach(function(item) {
+                var itemName = item.getAttribute('data-name').toLowerCase();
+                var itemCategory = item.getAttribute('data-category');
+                var itemType = item.getAttribute('data-type');
+                var show = true;
+                if (name && !itemName.includes(name)) show = false;
+                if (category && itemCategory !== category) show = false;
+                if (type && itemType !== type) show = false;
+                item.style.display = show ? '' : 'none';
+                if (show) found = true;
+            });
+            document.getElementById('noItems').style.display = found ? 'none' : '';
+        });
+    </script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>

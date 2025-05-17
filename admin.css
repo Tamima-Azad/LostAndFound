@@ -1,0 +1,31 @@
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: #f8f9fa;
+        }
+        .sidebar {
+            background-color: #343a40;
+            color: #fff;
+            min-height: 100vh;
+        }
+        .sidebar .nav-link {
+            color: #fff;
+        }
+        .sidebar .nav-link.active, .sidebar .nav-link:hover {
+            background-color: #23272b;
+            color: #fff;
+        }
+        .dashboard-card {
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .dashboard-card h4 {
+            color: #007bff;
+        }
+        .stat {
+            font-size: 2rem;
+            font-weight: bold;
+        }
