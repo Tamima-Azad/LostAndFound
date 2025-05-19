@@ -2,11 +2,12 @@
 session_start();
 require 'config/database.php';
 
-// (Optional: Enable error reporting for debugging)
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
+// Check for redirect parameter
+$redirect = isset($_GET['redirect']) ? $_GET['redirect'] : '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['action']) && $_POST['action'] === 'signup') {
@@ -27,16 +28,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $email = $_POST['email'];
         $password = $_POST['password'];
 
-        // Check if admin
+        // Check if admin with plain password
         $adminStmt = $pdo->prepare("SELECT * FROM users WHERE email = ? AND role = 'admin'");
         $adminStmt->execute([$email]);
         $admin = $adminStmt->fetch();
 
-        if ($admin && password_verify($password, $admin['password'])) {
-            $_SESSION['admin_id'] = $admin['id'];
-            $_SESSION['admin_name'] = $admin['name'];
-            header("Location: admin_dashboard.php");
-            exit();
+        if ($admin) {
+            if ($admin['password'] === $password || password_verify($password, $admin['password'])) {
+                $_SESSION['admin_id'] = $admin['id'];
+                $_SESSION['admin_name'] = $admin['name'];
+                header("Location: admin_dashboard.php");
+                exit();
+            }
         }
 
         // Check if normal user
@@ -47,7 +50,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($user && password_verify($password, $user['password'])) {
             $_SESSION['user_id'] = $user['id'];
             $_SESSION['user_name'] = $user['name'];
-            header("Location: dashboard.php");
+            // Remember Me functionality
+            if (!empty($_POST['remember_me'])) {
+                setcookie('remember_email', $email, time() + (86400 * 30), "/");
+            } else {
+                setcookie('remember_email', '', time() - 3600, "/");
+            }
+            // Redirect logic
+            if (!empty($_POST['redirect'])) {
+                header("Location: " . $_POST['redirect']);
+            } elseif (!empty($redirect)) {
+                header("Location: " . $redirect);
+            } else {
+                header("Location: dashboard.php");
+            }
             exit();
         } else {
             echo "Invalid email or password!";
@@ -57,7 +73,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 ?>
 
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -80,46 +95,45 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             color: white;
         }
 
+        .auth-container {
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 400px;
+            margin-top: 20px;
+            color: black;
+        }
 
-    .auth-container {
-        background-color: rgba(255, 255, 255, 0.9);
-        padding: 40px;
-        border-radius: 10px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        width: 400px;
-        margin-top: 20px;
-        color: black;
-    }
+        .auth-container h2 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
 
-    .auth-container h2 {
-        text-align: center;
-        margin-bottom: 30px;
-    }
+        .auth-container .form-group {
+            margin-bottom: 20px;
+        }
 
-    .auth-container .form-group {
-        margin-bottom: 20px;
-    }
+        .auth-container .btn-primary {
+            width: 100%;
+            background-color: #007bff;
+            border-color: #007bff;
+        }
 
-    .auth-container .btn-primary {
-        width: 100%;
-        background-color: #007bff;
-        border-color: #007bff;
-    }
+        .auth-container .form-text {
+            text-align: center;
+            margin-top: 20px;
+        }
 
-    .auth-container .form-text {
-        text-align: center;
-        margin-top: 20px;
-    }
+        nav.navbar {
+            width: 100%;
+            background-color: rgba(0,0,0,0.4);
+        }
 
-    nav.navbar {
-        width: 100%;
-        background-color: rgba(0,0,0,0.4);
-    }
-
-    nav.navbar .navbar-brand {
-        color: white;
-    }
-</style>
+        nav.navbar .navbar-brand {
+            color: white;
+        }
+    </style>
 </head>
 <body>
 
@@ -132,9 +146,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     <form id="login-form" method="POST">
         <input type="hidden" name="action" value="login">
+        <input type="hidden" name="redirect" value="<?php echo htmlspecialchars($redirect); ?>">
         <div class="form-group">
             <label for="login-email">Email</label>
-            <input type="email" class="form-control" id="login-email" name="email" placeholder="Enter email">
+            <input type="email" class="form-control" id="login-email" name="email" placeholder="Enter email" value="<?= isset($_COOKIE['remember_email']) ? htmlspecialchars($_COOKIE['remember_email']) : '' ?>">
         </div>
         <div class="form-group">
             <label for="login-password">Password</label>
@@ -147,8 +162,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </div>
             </div>
         </div>
+        <div class="form-group form-check">
+            <input type="checkbox" class="form-check-input" id="remember-me" name="remember_me" <?= isset($_COOKIE['remember_email']) ? 'checked' : '' ?>>
+            <label class="form-check-label" for="remember-me">Remember Me</label>
+        </div>
         <button type="submit" class="btn btn-primary">Login</button>
-        <p class="form-text"><a href="#">Forgot Password?</a></p>
+        <p class="form-text"><a href="forgot_password.php">Forgot Password?</a></p>
     </form>
 
     <form id="signup-form" method="POST" style="display: none;">

@@ -18,8 +18,16 @@ $foundItemsStmt = $pdo->prepare("SELECT * FROM found_items WHERE user_id = ? ORD
 $foundItemsStmt->execute([$user_id]);
 $foundItems = $foundItemsStmt->fetchAll(PDO::FETCH_ASSOC);
 
-// Fetch recent claims for this user
-$claimsStmt = $pdo->prepare("SELECT * FROM claims WHERE user_id = ? ORDER BY created_at DESC LIMIT 5");
+// Fetch recent claims for this user (with item name)
+$claimsStmt = $pdo->prepare("
+    SELECT c.*, 
+        IF(c.item_type='lost', l.item_name, f.item_name) AS item_name 
+    FROM claims c
+    LEFT JOIN lost_items l ON c.item_type='lost' AND c.item_id=l.id
+    LEFT JOIN found_items f ON c.item_type='found' AND c.item_id=f.id
+    WHERE c.user_id = ?
+    ORDER BY c.created_at DESC LIMIT 5
+");
 $claimsStmt->execute([$user_id]);
 $claims = $claimsStmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -50,9 +58,10 @@ $totalUserClaims = $totalUserClaims->fetchColumn();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Dashboard - FindIt</title>
+    <title>User Dashboard - Lost And Found</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
     <style>
         body {
             font-family: 'Nunito', sans-serif; /* More modern font */
@@ -216,22 +225,38 @@ $totalUserClaims = $totalUserClaims->fetchColumn();
                             </a>
                         </li>
                         <li class="nav-item">
+                            <a class="nav-link" href="exchange_items.php">
+                                <i class="fas fa-exchange-alt mr-2"></i> Exchanged Items
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="post_exchange.php">
+                                <i class="fas fa-plus-circle mr-2"></i> Post for Exchange
+                            </a>
+                        </li>
+                        
+                        <li class="nav-item">
                             <a class="nav-link" href="lost/foundItem.php">
                                 <i class="fas fa-plus-circle mr-2"></i> Post Lost/Found Item
                             </a>
                         </li>
-                        <li class="nav-item">
+                         <li class="nav-item">
                             <a class="nav-link" href="#">
-                                <i class="fas fa-search mr-2"></i> Found Item
+                                <i class="fas fa-list-alt mr-2"></i> My Listings
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">
+                            <a class="nav-link" href="browsingItem.php">
+                                <i class="fas fa-search mr-2"></i> Browse All Found Item
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="item_claim_requests.php">
                                 <i class="fas fa-tasks mr-2"></i> Item Claim Request
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">
+                            <a class="nav-link" href="my_claim.php">
                                 <i class="fas fa-clipboard-check mr-2"></i> My Claim
                             </a>
                         </li>
@@ -250,9 +275,19 @@ $totalUserClaims = $totalUserClaims->fetchColumn();
                                 <i class="fas fa-unlock-alt mr-2"></i> Recover Password
                             </a>
                         </li>
+                         <li class="nav-item">
+                            <a class="nav-link" href="messages.php">
+                                <i class="fas fa-envelope mr-2"></i> Messages
+                            </a>
+                        </li>
                         <li class="nav-item">
                             <a class="nav-link" href="logout.php">
                                 <i class="fas fa-sign-out-alt mr-2"></i> Logout
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="index.php">
+                                <i class="fas fa-home mr-2"></i> Home Page
                             </a>
                         </li>
                     </ul>
@@ -307,7 +342,7 @@ $totalUserClaims = $totalUserClaims->fetchColumn();
                                     <li>
                                         <?= htmlspecialchars($item['item_name']) ?> (Lost on <?= htmlspecialchars(date('M d, Y', strtotime($item['date']))) ?>)
                                         <span class="item-actions">
-                                            <a href="#">View</a> | <a href="#">Edit</a>
+                                            <a href="view_details.php?type=lost&id=<?= $item['id'] ?>">View</a> | <a href="#">Edit</a>
                                         </span>
                                     </li>
                                 <?php endforeach; ?>
@@ -316,7 +351,7 @@ $totalUserClaims = $totalUserClaims->fetchColumn();
                                 <?php endif; ?>
                             </ul>
                             <div class="text-right mt-2">
-                                <a href="#">View All Your Lost Items</a>
+                                <a href="browsingItem.php?type=lost">View All Your Lost Items</a>
                             </div>
                         </div>
                     </div>
@@ -328,7 +363,7 @@ $totalUserClaims = $totalUserClaims->fetchColumn();
                                     <li>
                                         <?= htmlspecialchars($item['item_name']) ?> (Found on <?= htmlspecialchars(date('M d, Y', strtotime($item['date']))) ?>)
                                         <span class="item-actions">
-                                            <a href="#">View</a> | <a href="#">Mark as Claimed</a>
+                                            <a href="view_details.php?type=found&id=<?= $item['id'] ?>">View</a> | <a href="#">Mark as Claimed</a>
                                         </span>
                                     </li>
                                 <?php endforeach; ?>
@@ -337,7 +372,7 @@ $totalUserClaims = $totalUserClaims->fetchColumn();
                                 <?php endif; ?>
                             </ul>
                             <div class="text-right mt-2">
-                                <a href="#">View All Your Found Items</a>
+                                <a href="browsingItem.php?type=found">View All Your Found Items</a>
                             </div>
                         </div>
                     </div>
@@ -349,7 +384,7 @@ $totalUserClaims = $totalUserClaims->fetchColumn();
                                     <li>
                                         <?= htmlspecialchars($claim['item_name']) ?> (<span class="<?= strtolower($claim['status']) ?>"><?= htmlspecialchars($claim['status']) ?></span>)
                                         <span class="item-actions">
-                                            <a href="#">View</a>
+                                            <a href="view_details.php?type=<?= $claim['item_type'] ?>&id=<?= $claim['item_id'] ?>">View</a>
                                         </span>
                                     </li>
                                 <?php endforeach; ?>
@@ -358,7 +393,7 @@ $totalUserClaims = $totalUserClaims->fetchColumn();
                                 <?php endif; ?>
                             </ul>
                             <div class="text-right mt-2">
-                                <a href="#">View All Your Claims</a>
+                                <a href="item_claim_requests.php">View All Your Claims</a>
                             </div>
                         </div>
                     </div>
@@ -368,7 +403,7 @@ $totalUserClaims = $totalUserClaims->fetchColumn();
                     <h3>Messages</h3>
                     <p>You have no new messages.</p>
                     <div class="text-right mt-2">
-                        <a href="#">View All Messages</a>
+                        <a href="messages.php">View All Messages</a>
                     </div>
                 </div>
             </main>

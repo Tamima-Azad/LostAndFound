@@ -5,7 +5,8 @@ CREATE TABLE users (
     email VARCHAR(150) NOT NULL UNIQUE,
     contact_no VARCHAR(30),
     password VARCHAR(255) NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    role VARCHAR(20) DEFAULT 'user'
 );
 
 -- LOST ITEMS TABLE
@@ -20,6 +21,7 @@ CREATE TABLE lost_items (
     image1 VARCHAR(255),
     image2 VARCHAR(255),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    status VARCHAR(20) DEFAULT 'unclaimed',
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
@@ -43,6 +45,7 @@ CREATE TABLE found_items (
     kept_state VARCHAR(100),
     kept_contact VARCHAR(30),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    status VARCHAR(20) DEFAULT 'unclaimed',
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
@@ -51,8 +54,22 @@ CREATE TABLE claims (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
     item_name VARCHAR(255) NOT NULL,
-    status VARCHAR(50) NOT NULL,
+    item_id INT NOT NULL,
+    item_type ENUM('lost','found') NOT NULL,
+    status VARCHAR(50) NOT NULL DEFAULT 'New',
+    claim_date DATE NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+-- EXCHANGE ITEMS TABLE
+CREATE TABLE IF NOT EXISTS exchange_items (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    item_name VARCHAR(255) NOT NULL,
+    description TEXT NOT NULL,
+    category VARCHAR(100) NOT NULL,
+    exchange_for VARCHAR(255) NOT NULL,
+    created_at DATETIME NOT NULL,
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 -- Add a 'role' column to your users table if it doesn't exist
@@ -68,3 +85,18 @@ VALUES (
     'admin123', -- <-- replace with a real hash!
     'admin'
 );
+ALTER TABLE users ADD COLUMN reset_token VARCHAR(100), ADD COLUMN reset_expires DATETIME;
+ALTER TABLE exchange_items ADD COLUMN image VARCHAR(255) DEFAULT NULL;
+
+CREATE TABLE messages (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    exchange_id INT NOT NULL,
+    sender_id INT NOT NULL,
+    receiver_id INT NOT NULL,
+    message TEXT NOT NULL,
+    sent_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (exchange_id) REFERENCES exchange_items(id) ON DELETE CASCADE,
+    FOREIGN KEY (sender_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (receiver_id) REFERENCES users(id) ON DELETE CASCADE
+);
+ALTER TABLE messages ADD COLUMN parent_id INT DEFAULT 0;

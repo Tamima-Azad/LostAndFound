@@ -1,11 +1,10 @@
 <?php
-<?php
 session_start();
 require 'config/database.php';
 
 // (Optional) Check if admin is logged in
 if (!isset($_SESSION['admin_id'])) {
-    header("Location: admin_login.php");
+    header("Location: login.php");
     exit();
 }
 
@@ -26,15 +25,14 @@ $totalRejected = $pdo->query("SELECT COUNT(*) FROM claims WHERE status = 'Reject
     <title>Admin Dashboard - Lost And Found</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <link rel="stylesheet" href="admin.css"> </head>
-    
+    <link rel="stylesheet" href="admin.css">
 </head>
 <body>
     <nav class="navbar navbar-dark bg-dark">
         <a class="navbar-brand" href="#">Admin Dashboard</a>
         <span class="navbar-text text-white">
             <a href="admin_profile.php" class="text-white mr-3"><i class="fas fa-user-cog"></i> Profile</a>
-            <a href="admin_logout.php" class="text-white"><i class="fas fa-sign-out-alt"></i> Logout</a>
+            <a href="logout.php" class="text-white"><i class="fas fa-sign-out-alt"></i> Logout</a>
         </span>
     </nav>
     <div class="container-fluid">
@@ -53,10 +51,11 @@ $totalRejected = $pdo->query("SELECT COUNT(*) FROM claims WHERE status = 'Reject
                         <li class="nav-item"><a class="nav-link" href="admin_contact.php"><i class="fas fa-envelope"></i> Contact Us</a></li>
                         <li class="nav-item"><a class="nav-link" href="admin_profile.php"><i class="fas fa-user-cog"></i> Profile</a></li>
                         <li class="nav-item"><a class="nav-link" href="admin_change_password.php"><i class="fas fa-key"></i> Change Password</a></li>
-                        <li class="nav-item"><a class="nav-link" href="admin_logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+                        <li class="nav-item"><a class="nav-link" href="logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
                     </ul>
                 </div>
             </nav>
+
             <!-- Main Content -->
             <main class="col-md-10 ml-sm-auto px-4">
                 <div class="pt-4 pb-2 mb-3 border-bottom">
@@ -106,7 +105,6 @@ $totalRejected = $pdo->query("SELECT COUNT(*) FROM claims WHERE status = 'Reject
                         </div>
                     </div>
                 </div>
-                <!-- You can add charts, tables, or more dashboard widgets here -->
             </main>
         </div>
     </div>

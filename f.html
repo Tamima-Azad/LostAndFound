@@ -1,0 +1,26 @@
+<?php if (!empty($items)): ?>
+    <?php foreach ($items as $item): ?>
+        <div class="item-card">
+            <?php if (!empty($item['image'])): ?>
+                <img src="uploads/<?= htmlspecialchars($item['image']) ?>" alt="Item Image" class="item-img">
+            <?php endif; ?>
+            <h5>
+                <?= htmlspecialchars($item['item_name']) ?>
+                <small class="text-muted">(<?= htmlspecialchars($item['category']) ?>)</small>
+                <?php if (isset($item['is_available']) && $item['is_available'] == 0): ?>
+                    <span class="badge badge-danger ml-2">Not Available</span>
+                <?php else: ?>
+                    <span class="badge badge-success ml-2">Available</span>
+                <?php endif; ?>
+            </h5>
+            <p><?= nl2br(htmlspecialchars($item['description'])) ?></p>
+            <p><strong>Wants in exchange:</strong> <?= htmlspecialchars($item['exchange_for']) ?></p>
+            <p class="mb-2"><small>Posted by <?= htmlspecialchars($item['user_name']) ?> (<?= htmlspecialchars($item['user_email']) ?>) on <?= date('M d, Y', strtotime($item['created_at'])) ?></small></p>
+        </div>
+    <?php endforeach; ?>
+<?php else: ?>
+    <div class="alert alert-warning text-center py-4">
+        <i class="fas fa-box-open fa-2x mb-2"></i><br>
+        No exchange or rent items available from other users.
+    </div>
+<?php endif; ?>
