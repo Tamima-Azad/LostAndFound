@@ -23,6 +23,7 @@ $stmt = $conn->prepare($sql);
 $stmt->bind_param("ssss", $name, $email, $contact, $password);
 
 if ($stmt->execute()) {
+    setcookie('remember_email', $email, time() + (86400 * 30), "/"); // 30 days
     echo "Signup successful!";
 } else {
     echo "Error: " . $stmt->error;
@@ -31,3 +32,7 @@ if ($stmt->execute()) {
 $stmt->close();
 $conn->close();
 ?>
+
+<input type="email" name="email" class="form-control" 
+    value="<?= isset($_COOKIE['remember_email']) ? htmlspecialchars($_COOKIE['remember_email']) : '' ?>" 
+    required>
