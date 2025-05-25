@@ -16,6 +16,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['claim_id'], $_POST['a
     if (in_array($action, ['Claimed', 'Rejected'])) {
         $updateStmt = $pdo->prepare("UPDATE claims SET status = ? WHERE id = ?");
         $updateStmt->execute([$action, $claim_id]);
+
+        // If approved, also update the item's status to 'claimed' or 'unclaimed' in lost_items or found_items
+        $claimStmt = $pdo->prepare("SELECT item_type, item_id FROM claims WHERE id = ?");
+        $claimStmt->execute([$claim_id]);
+        $claim = $claimStmt->fetch(PDO::FETCH_ASSOC);
+        if ($claim) {
+            if ($claim['item_type'] === 'lost') {
+                $pdo->prepare("UPDATE lost_items SET status = ? WHERE id = ?")
+                    ->execute([$action === 'Claimed' ? 'claimed' : 'unclaimed', $claim['item_id']]);
+            } elseif ($claim['item_type'] === 'found') {
+                $pdo->prepare("UPDATE found_items SET status = ? WHERE id = ?")
+                    ->execute([$action === 'Claimed' ? 'claimed' : 'unclaimed', $claim['item_id']]);
+            }
+        }
+
         // Refresh to show updated status
         header("Location: item_claim_requests.php");
         exit();

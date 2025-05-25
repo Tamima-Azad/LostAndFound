@@ -237,7 +237,7 @@ if ($type !== '') {
                     <a class="nav-link" href="browsingItem.php">Browse Items</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="about.php">About Us</a>
+                    <a class="nav-link" href="about_us.php">About Us</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="contact.php">Contact Us</a>
@@ -327,7 +327,13 @@ if ($type !== '') {
                                     <p><i class="fas fa-tag mr-2"></i> Category: <?= htmlspecialchars($item['category']) ?></p>
                                     <p><i class="fas fa-question-circle mr-2"></i> Type: <?= htmlspecialchars(ucfirst($type)) ?></p>
                                     <p><i class="fas fa-map-marker-alt mr-2"></i> Location: <?= htmlspecialchars($item['location']) ?></p>
-                                    <p><i class="far fa-calendar-alt mr-2"></i> Status: <?= htmlspecialchars($item['status']) ?></p>
+                                    <p><i class="far fa-calendar-alt mr-2"></i> Status: 
+                                        <?php if ($claimedStatus === 'claimed'): ?>
+                                            <span class="badge badge-success">Claimed</span>
+                                        <?php else: ?>
+                                            <span class="badge badge-warning text-dark">Unclaimed</span>
+                                        <?php endif; ?>
+                                    </p>
                                 </div>
                                 <div class="item-actions">
                                     <!-- View Details button -->
@@ -348,6 +354,18 @@ if ($type !== '') {
                                             </a>
                                         <?php else: ?>
                                             <a href="login.php?redirect=<?= urlencode("claim_item.php?type=found&id=$itemId") ?>" class="btn btn-sm btn-primary">
+                                                <i class="fas fa-sign-in-alt mr-1"></i> Claim
+                                            </a>
+                                        <?php endif; ?>
+                                    <?php endif; ?>
+                                    <!-- Claim button: only for lost & unclaimed & not owner -->
+                                    <?php if ($type === 'lost' && $claimedStatus === 'unclaimed' && !$isOwner): ?>
+                                        <?php if (isset($_SESSION['user_id'])): ?>
+                                            <a href="claim_item.php?type=lost&id=<?= $itemId ?>" class="btn btn-sm btn-warning">
+                                                <i class="fas fa-handshake mr-1"></i> Claim
+                                            </a>
+                                        <?php else: ?>
+                                            <a href="login.php?redirect=<?= urlencode("claim_item.php?type=lost&id=$itemId") ?>" class="btn btn-sm btn-warning">
                                                 <i class="fas fa-sign-in-alt mr-1"></i> Claim
                                             </a>
                                         <?php endif; ?>

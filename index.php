@@ -129,7 +129,7 @@ session_start();
                     <a class="nav-link" href="index.php">Home <span class="sr-only">(current)</span></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Exchanged Item</a>
+                    <a class="nav-link" href="exchange_items.php">Exchanged Item</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" 
@@ -139,6 +139,12 @@ session_start();
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="browsingItem.php">Browse Items</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="about_us.php">About Us</a>
+                </li>
+                 <li class="nav-item">
+                    <a class="nav-link" href="contact.php">Contact Us</a>
                 </li>
                 <?php if (isset($_SESSION['user_id'])): ?>
                     <li class="nav-item">

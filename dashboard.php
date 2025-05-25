@@ -266,13 +266,8 @@ $totalUserClaims = $totalUserClaims->fetchColumn();
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">
+                            <a class="nav-link" href="forgot_password.php">
                                 <i class="fas fa-key mr-2"></i> Change Password
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">
-                                <i class="fas fa-unlock-alt mr-2"></i> Recover Password
                             </a>
                         </li>
                          <li class="nav-item">
