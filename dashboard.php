@@ -70,6 +70,24 @@ $totalUserClaims = $totalUserClaims->fetchColumn();
             color: #333; /* Darker text for better readability */
         }
 
+        .navbar-custom {
+            background:rgb(28, 35, 55);
+            color: #fff;
+            box-shadow: 0 2px 8px rgba(25,78,212,0.08);
+        }
+        .navbar-custom .navbar-brand,
+        .navbar-custom .nav-link,
+        .navbar-custom .navbar-toggler {
+            color: #fff !important;
+        }
+        .navbar-custom .nav-link:hover {
+            color: #00bfa5 !important;
+        }
+        .navbar-toggler {
+            border: none;
+            outline: none;
+        }
+
         .sidebar {
             background-color: #2c3e50; /* Darker sidebar */
             color: #fff;
@@ -207,9 +225,71 @@ $totalUserClaims = $totalUserClaims->fetchColumn();
             color: #00897b;
             text-decoration: underline;
         }
+
+        .sidebar-toggle {
+            display: none;
+        }
+        @media (max-width: 991.98px) {
+            .sidebar {
+                position: fixed;
+                left: -260px;
+                top: 0;
+                width: 240px;
+                height: 100%;
+                z-index: 1050;
+                transition: left 0.3s;
+            }
+            .sidebar.show {
+                left: 0;
+            }
+            .sidebar-toggle {
+                display: block;
+                position: absolute;
+                top: 18px;
+                left: 18px;
+                background: none;
+                border: none;
+                font-size: 2rem;
+                color: #194ed4;
+                z-index: 1051;
+            }
+            .main-content {
+                padding: 30px 10px 30px 10px;
+            }
+        }
+        .sidebar-backdrop {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.2);
+            z-index: 1049;
+        }
+        .sidebar.show ~ .sidebar-backdrop {
+            display: block;
+        }
     </style>
 </head>
 <body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-custom">
+        <button class="sidebar-toggle mr-3" id="sidebarToggle" aria-label="Toggle sidebar">
+            <i class="fas fa-bars"></i>
+        </button>
+        <a class="navbar-brand" href="index.php"><i class="fas fa-search-location mr-2"></i>FindIt</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#mainNavbar" aria-controls="mainNavbar" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon" style="color:#fff;"><i class="fas fa-ellipsis-v"></i></span>
+        </button>
+        <div class="collapse navbar-collapse" id="mainNavbar">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item"><a class="nav-link" href="dashboard.php"><i class="fas fa-home mr-1"></i>Dashboard</a></li>
+                <li class="nav-item"><a class="nav-link" href="browsingItem.php"><i class="fas fa-search mr-1"></i>Browse</a></li>
+                <li class="nav-item"><a class="nav-link" href="about_us.php"><i class="fas fa-info-circle mr-1"></i>About</a></li>
+                <li class="nav-item"><a class="nav-link" href="contact.php"><i class="fas fa-envelope mr-1"></i>Contact</a></li>
+                <li class="nav-item"><a class="nav-link" href="logout.php"><i class="fas fa-sign-out-alt mr-1"></i>Logout</a></li>
+            </ul>
+        </div>
+    </nav>
+    <!-- End Navbar -->
 
     <div class="container-fluid">
         <div class="row">
@@ -288,7 +368,7 @@ $totalUserClaims = $totalUserClaims->fetchColumn();
                     </ul>
                 </div>
             </nav>
-
+            <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
             <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-md-4 main-content">
                 <div class="dashboard-header">
                     <h1>Welcome, <?= htmlspecialchars($_SESSION['user_name']) ?>!</h1>
@@ -415,6 +495,19 @@ $totalUserClaims = $totalUserClaims->fetchColumn();
             statusSpans.forEach(span => {
                 span.classList.add(span.textContent.toLowerCase());
             });
+        });
+
+        // Sidebar toggle for mobile
+        const sidebar = document.getElementById('sidebar');
+        const toggleBtn = document.getElementById('sidebarToggle');
+        const backdrop = document.getElementById('sidebarBackdrop');
+        toggleBtn.addEventListener('click', function() {
+            sidebar.classList.toggle('show');
+            backdrop.style.display = sidebar.classList.contains('show') ? 'block' : 'none';
+        });
+        backdrop.addEventListener('click', function() {
+            sidebar.classList.remove('show');
+            backdrop.style.display = 'none';
         });
     </script>
 </body>
